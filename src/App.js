@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LayoutMaterialTable from './containers/Layout/LayoutMaterialTable';
+import Layout from './containers/Layout/Layout';
 
 const StyledApp = styled.div`
   min-width: 1024px;
@@ -9,7 +9,7 @@ const StyledApp = styled.div`
 const App = () => {
   return (
     <StyledApp>
-		  <LayoutMaterialTable />
+		  <Layout />
     </StyledApp>
   );
 };

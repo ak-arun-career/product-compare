@@ -37,13 +37,19 @@
       ">0.2%",
       "not dead",
       "not op_mini all",
-      "ie >= 9"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "ie 11"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version",
-      "ie >= 9"
+      "ie 11"
     ]
+  },
+  "devDependencies": {
+    "@mrhenry/babel-plugin-core-web": "^0.3.17"
   }
 }
