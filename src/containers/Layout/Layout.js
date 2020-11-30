@@ -63,10 +63,6 @@ class Layout extends Component {
 			})
 		});
 
-		// console.log('products:\n',sortedProducts);
-		// console.log('productsSubset:\n',sortedProducts);
-		// console.log('featureRowData:\n', formatProducts(sortedProducts));
-
 		/**Action dispatched to update the redux store with the  latest state */
 		this.props.dispatchStateData({
 			type: ActionTypes.ADD_STATE,

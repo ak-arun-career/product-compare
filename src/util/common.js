@@ -55,7 +55,8 @@ export const addObjToArray = (arr, name, obj) => {
 
 /**
  * formatProducts
- * @summary This convenience method is used to format the product data fetched from the API endpoint and return the re-formatted data to generate the feature rows
+ * @summary This convenience method is used to format the product data fetched from the API endpoint
+ * and return the re-formatted data to generate the feature rows
  * @param {*} allProducts 
  */
 export const formatProducts = (allProducts) => {

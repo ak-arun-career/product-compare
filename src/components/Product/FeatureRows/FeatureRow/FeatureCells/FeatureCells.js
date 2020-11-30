@@ -1,7 +1,6 @@
 /**
  * @description This 'featureCells' component provides an array of feature cells per feature row.
  */
-import { Fragment } from 'react';
 import FeatureCell from './FeatureCell/FeatureCell';
 import styles from './FeatureCells.module.css';
 import Badge from './FeatureCell/Badge/Badge';
@@ -54,11 +53,11 @@ const featureCells = (props) => {
     );
 
     return(
-        <Fragment>
+        <>
             {
                 featureCells(props.rowValues, props.rowName)
             }
-        </Fragment>
+        </>
         
     );
 };

@@ -1,7 +1,6 @@
 /**
  * @description This 'featureRows' component provides a array of feature rows.
  */
-import { Fragment } from 'react';
 import FeatureRow from './FeatureRow/FeatureRow';
 import FeatureCells from './FeatureRow/FeatureCells/FeatureCells';
 import FeatureCell from './FeatureRow/FeatureCells/FeatureCell/FeatureCell';
@@ -17,6 +16,7 @@ const featureRows = (props) => {
 
     /**
      * renderedTableRows
+     * @summary Renders thea FeatureRow per product feature
      */
     let renderedTableRows = sortedfeatureRowData.map((product, index) => {
         if(product.rowName !== 'Name' && product.rowName !== 'SalePrice' &&
@@ -30,16 +30,15 @@ const featureRows = (props) => {
                         rowValues={product.rowValues}
                         rowName={product.rowName}
                     />
-                    
                 </FeatureRow>
             );
         }
     });
 
     return (
-        <Fragment>
+        <>
             {renderedTableRows}
-        </Fragment>
+        </>
         
     )
 
