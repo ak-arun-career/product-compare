@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - [Functionality Overview](#functionality-overview)
 - [Folder Structure](#folder-structure)
 - [Project Dependencies](#project-dependencies)
-- [IE11 Support](#supported-language-features-and-polyfills)
+- [IE11 Support](#ie11-support)
 
 
 ## Getting started
@@ -183,6 +183,7 @@ Following are the dependency packages required by this application to function
 ## IE11 support
 
 This project supports a superset of the latest JavaScript standard.<br>
-This is made possible by importing the following into the `./index.js` file
-    - core-js/stable (to polyfill ECMAScript features) and
-    - regenerator-runtime/runtime (needed to use transpiled generator functions)
+This is made possible by importing the following packages into the `./index.js` file<br>
+
+    `core-js/stable` --> to polyfill ECMAScript features<br>
+    `regenerator-runtime/runtime` --> needed to use transpiled generator functions
