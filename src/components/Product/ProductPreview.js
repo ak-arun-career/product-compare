@@ -1,32 +1,44 @@
-import styled from 'styled-components';
+/**
+ * @description This 'ProductPreview' component is designed to provide a preview of the product, which includes an image, title and price.
+ */
+import React from 'react';
 
-import Button from './Button/Button';
-import PreviewImage from './PreviewImage/PreviewImage';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from './CardMedia/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import IconButton from '@material-ui/core/IconButton';
+import Delete from '@material-ui/icons/Delete';
 import ProductPriceTag from './ProductPriceTag/ProductPriceTag';
 
-const StyledProductPreview = styled.div`
-    ${'' /* width: 9rem; */}
-    height: 9rem;
-    border: 1px dotted royalblue;
-    position: relative;
-    padding: 1rem;
-`;
+import styles from './ProductPreview.module.css';
+import { unitText } from '../../util/constants';
+import { isDisabled } from '../../util/common';
 
-const StyledProductTitle = styled.div`
-    color: royalblue;
-
-`;
-
-const productPreview = (props) => {
+const ProductPreview = (props) => {
     return (
-        <StyledProductPreview>
-            {/* Product {props.children} Preview */}
-            <Button></Button>
-            <PreviewImage src=''>1</PreviewImage>
-            <StyledProductTitle>Product title {props.children}</StyledProductTitle>
-            <ProductPriceTag price='299.95' priceUnit='per stuk / excl. btw' />
-        </StyledProductPreview>
+        <Card elevation={0}>
+            <CardHeader
+                action={
+                    <IconButton
+                        aria-label="settings"
+                        onClick={props.clicked}
+                        disabled={isDisabled(props.details.Artikelnummer, props.productsSubset)}>
+                        <Delete className={isDisabled(props.details.Artikelnummer, props.productsSubset) ? styles.disabled : styles.enabled}/>
+                    </IconButton>
+                }
+            />
+            <CardMedia
+                className={styles.media}
+                src={props.details.ProductImage}
+                alt={`Preview not available`}
+            />
+            <CardContent>
+                <div className={styles.royalblue}>{props.details.Name}</div>
+                <ProductPriceTag price={props.details.SalePrice} priceUnit={unitText} />
+            </CardContent>
+        </Card>
     );
-};
+}
 
-export default productPreview;
+export default ProductPreview;

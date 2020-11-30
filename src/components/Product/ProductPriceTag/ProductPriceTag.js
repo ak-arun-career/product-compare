@@ -1,4 +1,6 @@
-import React, { Fragment } from 'react';
+/**
+ * @description This 'productPriceTag' component provides a price tag component per product preview panel.
+ */
 import styled from 'styled-components';
 
 const StyledPriceTag = styled.span`
@@ -15,10 +17,10 @@ const StyledPriceUnitDescription = styled.div`
 
 const productPriceTag = (props) => {
     return (
-        <Fragment>
+        <>
             <StyledPriceTag>{props.price}</StyledPriceTag>
             <StyledPriceUnitDescription>{props.priceUnit}</StyledPriceUnitDescription>
-        </Fragment>
+        </>
     );
 };
 

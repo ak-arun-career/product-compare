@@ -1,0 +1,22 @@
+.Title {
+    color: royalblue;
+    font-size: 1.25rem;
+}
+.List {
+    width: 300px;
+}
+.ListItem {
+    padding: 0.5rem 0 !important;
+    text-align: left;
+}
+
+.ListIcon {
+    min-width: 1rem !important;
+}
+
+.enabled {
+    color: royalblue !important;
+}
+.disabled {
+    color: #dfdfdf !important;
+}

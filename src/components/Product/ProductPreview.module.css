@@ -1,0 +1,12 @@
+.enabled, .royalblue {
+    color: royalblue;
+}
+.disabled {
+    color: #dfdfdf;
+}
+
+.media {
+    max-width: 100px;
+    min-height: 100px;
+    margin: 0 auto;
+}
