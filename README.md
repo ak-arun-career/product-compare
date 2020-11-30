@@ -84,19 +84,19 @@ It uses the [/eriks/products/all](https://5f993a3050d84900163b845a.mockapi.io/er
 ### State management approach
     
     - The data is fetched from the provided API endpoint using the `axios` utility.
-    - Upon a successful fetch, the data is formatted and stored as state in the following manner:
-            `All Products` --> Original/Pure data set
-            `Products Subset` --> Subset of original data after filters are applied (or) Product deleted from list
-            `Feature Row data` --> Formatted data used to generate the feature rows
-    - The helper functions used in formatting the above sets of data are imported from './util/common.js'
     - A central data store is created in the index.js file using the `redux` utility
+    - The initial state is defined and all dispatched actions are captured by the `reducer` function, as defined in the `./store/reducer.js` file
     - All 'action dispatchers' are handled by the `mapStateToProps` and `mapDispatchToProps` functions in the `./containers/Layout/Layout.js` file
-    - The initial state is defined and all dispatched actions are handled by the `reducer` function defined in the `./store/reducer.js` file
     - All the actions are labelled as contants in the './store/actions.js' file, and imported in the action dispatch and reducer functions.
     - Following are the actions used in this application:
         - ADD_STATE --> this label is to dispatch an action upon initial fetch of the data from the API endpoint
         - ADD_PRODUCT --> this label is used to dispatch an action when a filter option is selected from the filter panel
         - DELETE_PRODUCT --> this label is used to dispatch an action when a filter is de-selected or a product is deleted from the comparison grid
+    - Upon a successful data fetch, the data is formatted and stored as state in the following manner:
+            `All Products` --> Original/Pure data set
+            `Products Subset` --> Subset of original data after filters are applied (or) Product deleted from list
+            `Feature Row data` --> Formatted data used to generate the feature rows
+    - The helper functions used in formatting the above sets of data are imported from './util/common.js'
 
 
 
@@ -143,7 +143,6 @@ product-compare/
                                 Badge.js
             ProductPriceTag/
                 ProductProceTag.js
-            
     containers/
         Layout/
             Layout.js
@@ -160,7 +159,7 @@ product-compare/
 
 
 ## Project Dependencies
-Mentioned below are the dependency packages for this application to run
+Following are the dependency packages required by this application to function
 
 ```
     "@material-ui/core": "^4.11.0",

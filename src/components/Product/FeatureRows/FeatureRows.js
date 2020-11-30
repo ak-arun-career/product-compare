@@ -23,7 +23,7 @@ const featureRows = (props) => {
         product.rowName !== 'ProductImage' && product.rowName !== 'Atp'&& product.rowName !== 'Display') {
             return (
                 <FeatureRow key={`${product.rowName}__${index}`} className={product.highlightRow ? styles.gray : null}>
-                    <FeatureCell>
+                    <FeatureCell className={styles.FeatureLabel} style={{borderRight: '1px solid #efefef'}}>
                         {product.rowName}
                     </FeatureCell>
                     <FeatureCells 

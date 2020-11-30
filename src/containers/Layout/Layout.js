@@ -95,12 +95,12 @@ class Layout extends Component {
 
 	/** The default render method */
 	render() {
-		let renderedTableRows = null;
+		let featureRows = null;
 		if(this.props.featureRowDataAvailable) {//Wait until data is set to the state
 			/**
 			 * @summary This constant contains the list of rendered feature rows generates from props.featureRowData
 			 */
-			renderedTableRows = <FeatureRows products = {this.props.featureRowData} />
+			featureRows = <FeatureRows products = {this.props.featureRowData} />
 		}
 
 		/**
@@ -128,7 +128,7 @@ class Layout extends Component {
 				<Table aria-label="customized table">
 					<TableHead>
 						<FeatureRow>
-							<FeatureCell className={classes.FilterPanel}>
+							<FeatureCell className={classes.FilterPanel} style={{borderRight: '1px solid #efefef'}}>
 								<FilterPanel
 									{...this.props}
 									onChange={(event) => this.onFilterOptionClicked(event)}
@@ -138,7 +138,7 @@ class Layout extends Component {
 						</FeatureRow>
 					</TableHead>
 					<TableBody>
-						{renderedTableRows}
+						{featureRows}
 					</TableBody>
 				</Table>
 				</TableContainer>

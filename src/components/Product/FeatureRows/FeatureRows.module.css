@@ -2,6 +2,10 @@
     background-color: #efefef !important;
 }
 
+.FeatureLabel {
+    border-right: 1px solid #efefef !important;
+}
+
 .FeaturePreview {
     padding: 0 !important;
 }

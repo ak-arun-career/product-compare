@@ -5,8 +5,9 @@
 .FilterPanel {
     min-height: 300px;
     padding: 0.5rem !important;
+    border-left: 1px solid #efefef;
     border-right: 1px solid #efefef;
-    border-bottom: 0 none
+    border-bottom: 0 none !important;
 }
 
 .hide {

@@ -6,9 +6,9 @@ import styles from './FeatureCell.module.css' ;
 
 const featureCell = (props) => (
     <TableCell
-        style={props.style}
-        className={styles.FeatureLabel}>
-            {props.children}
+    style={props.style}
+        className={styles.FeatureCell}>
+        {props.children}
     </TableCell>
 );
 
