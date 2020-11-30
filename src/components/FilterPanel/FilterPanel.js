@@ -29,7 +29,7 @@ const filterPanel = (props) => {
   };
 
   return (
-      <List>
+      <List className={styles.List}>
           <Typography variant="h5" className={styles.Title}>
             {filterPanelTitle}
           </Typography>
