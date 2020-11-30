@@ -1,3 +1,7 @@
+/**
+ * @description This 'FilterPanel' component is designed to provide a filter panel on the app.
+ */
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -6,35 +10,50 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 
 import { filterPanelTitle } from '../../util/constants';
-import { productCountIndicator } from '../../util/common';
+import { isDisabled } from '../../util/common';
+import styles from './FilterPanel.module.css';
 
 const filterPanel = (props) => {  
+  
+  /**
+   * @description A method used to set the checked property of a filter option based on the values in the props.productSubset array
+   * @param {String} keyName 
+   * @param {Array} arrayName 
+   */
+  const setChecked = (keyName, arrayName) => {
+    for (let i=0; i < arrayName.length; i++) {
+      if (arrayName[i].Artikelnummer === keyName) {
+          return true;
+      }
+    }
+  };
+
   return (
       <List>
-          <Typography variant="h5" style={{color: 'royalblue'}}>
-              {filterPanelTitle}
-            </Typography>
-          {props.products.map((product) => {
-            const labelId = `checkbox-list-label-${product.Name}`;
+          <Typography variant="h5" className={styles.Title}>
+            {filterPanelTitle}
+          </Typography>
+          {props.products.map((product, index) => {
             return(
               <ListItem
-                style={{padding: '0.5rem 0'}}
-                disabled={(product.Display && productCountIndicator(props.products) < 3) ? true : false}
+                className={styles.ListItem}
                 key={product.Name}
                 dense
                 button
-                onClick={() => props.onShowHideProduct(product.Artikelnummer)}>
-                <ListItemIcon style={{minWidth: '1rem'}}>
+                onChange={props.onChange}
+                >
+                <ListItemIcon className={styles.ListIcon}>
                   <Checkbox
-                    style={{color:'royalblue'}}
+                    className={isDisabled(product.Artikelnummer, props.productsSubset) ? styles.disabled : styles.enabled}
                     edge="start"
-                    checked={product.Display}
-                    tabIndex={-1}
+                    checked={ setChecked(product.Artikelnummer, props.productsSubset) ? true : false}
+                    disabled={isDisabled(product.Artikelnummer, props.productsSubset)}
                     disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
+                    value={product.Artikelnummer}
+                    inputProps={{tabIndex: index}}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={product.Name} />
+                <ListItemText primary={product.Name} />
               </ListItem>
             );
           })}

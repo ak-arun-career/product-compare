@@ -1,3 +1,6 @@
+/**
+ * @description This 'productPriceTag' component provides a price tag component per product preview panel.
+ */
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 

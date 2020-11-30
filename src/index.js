@@ -1,3 +1,4 @@
+import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,6 +9,9 @@ import './index.css';
 import App from './App';
 import reducer from './store/reducer';
 
+/**
+ * @summary A central store is created
+ */
 const store = createStore(reducer);
 
 ReactDOM.render(

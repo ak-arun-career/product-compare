@@ -1,26 +1,26 @@
-import React, { Component, Fragment } from 'react';
+/**
+ * @description This 'Layout' component is a major component of the app.
+ * This component manages the state of the whole application.
+ */
+
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+import { Table, TableHead, TableBody, TableContainer, Paper} from '@material-ui/core';
 
-import Paper from '@material-ui/core/Paper';
 import FilterPanel from '../../components/FilterPanel/FilterPanel';
-import ProductPreviewMaterial from '../../components/Product/ProductPreviewMaterial';
-import FeatureRow from '../../components/Product/FeatureRow/FeatureRow';
+import ProductPreview from '../../components/Product/ProductPreview';
+import FeatureRow from '../../components/Product/FeatureRows/FeatureRow/FeatureRow';
 
 import classes from './Layout.module.css';
 import * as ActionTypes from '../../store/actions';
 import Title from '../../components/UI/Title/Title';
-import { title } from '../../util/constants';
-import BadgeImage from '../../components/Product/Badge/Badge';
-import FeatureCell from '../../components/Product/FeatureRow/FeatureCell/FeatureCell';
-import { productCountIndicator } from '../../util/common';
+import * as Constants from '../../util/constants';
+import FeatureCell from '../../components/Product/FeatureRows/FeatureRow/FeatureCells/FeatureCell/FeatureCell';
+import { formatProducts } from '../../util/common';
+import FeatureRows from '../../components/Product/FeatureRows/FeatureRows';
 
 class Layout extends Component {
-
 	/**
 	 * @method componentDidMount
 	 * @summary Lifecycle method triggered on load of component
@@ -31,15 +31,15 @@ class Layout extends Component {
 	componentDidMount() {
 		/** axios: HTTP client */
 		axios.get('https://5f993a3050d84900163b845a.mockapi.io/eriks/products/all')
-			/** Success block */
-			.then(response => {
-				/** The fetch product data is formatted **/
-				this.formatProductsData(response.data.products);
-			})
-			/** Error block */
-			.catch(error => {
-			   console.log(error);
-			});
+		/** Success block */
+		.then(response => {
+			/** The fetch product data is formatted **/
+			this.formatProductsData(response.data.products);
+		})
+		/** Error block */
+		.catch(error => {
+			console.log(error);
+		});
 	}
 
 	/**
@@ -49,132 +49,92 @@ class Layout extends Component {
 	 * @param {*} products 
 	 */
 	formatProductsData = (products) => {
-	let allProducts = products;
-	let sortedProducts = [];
-	
-	/** Iterating through allProducts array to create an array of objects suiting the component tree needs */
-	allProducts.map((product, index) => (
-		Object.keys(product).map(key => {
-			let tempKey = key.charAt(0).toUpperCase() + key.slice(1)
-			if(sortedProducts[index] === undefined) {
-				sortedProducts[index] = {};
+		let allProducts = products;
+		let sortedProducts = [];
+		
+		/** Iterating through allProducts array to create an array of objects suiting the component tree needs */
+		allProducts.map((product, index) => {
+			Object.keys(product).map(key => {
+				let tempKey = key.charAt(0).toUpperCase() + key.slice(1)
+				if(sortedProducts[index] === undefined) {
+					sortedProducts[index] = {};
+				}
+				sortedProducts[index][tempKey] = product[key];
+			})
+		});
+
+		// console.log('products:\n',sortedProducts);
+		// console.log('productsSubset:\n',sortedProducts);
+		// console.log('featureRowData:\n', formatProducts(sortedProducts));
+
+		/**Action dispatched to update the redux store with the  latest state */
+		this.props.dispatchStateData({
+			type: ActionTypes.ADD_STATE,
+			newState: {...this.state,
+				products: sortedProducts,//Original data
+				productsSubset: sortedProducts,//Subset of original data (original data with filters applied)
+				featureRowData: formatProducts(sortedProducts),//filtered data with sorted to generate feature rows
+				featureRowDataAvailable: true
 			}
-			sortedProducts[index][tempKey] = product[key];
-		})
-	));
+		});
+	};
 
-	/**Sorted feature keys array */
-	const sortedFeatureKeys = Object.keys(sortedProducts[0]).sort();
+	/**
+	 * onFilterOptionClicked
+	 * @summary This method triggers the show/hide of a product when a filter option checkbox is toggled
+	 * @param {Object} event 
+	 */
+	onFilterOptionClicked = (event) => {
+		event.stopPropagation();
+		let checked = event.target.checked;
+		let artikelnummer = event.target.value;
+		let index = event.target.tabIndex;
 
-	/**Action dispatched to update the redux store with the  latest state */
-	this.props.dispatchStateData({
-		type: ActionTypes.ADD_STATE,
-		newState: {...this.state,
-			products: sortedProducts,
-			sortedFeatureKeys: sortedFeatureKeys,
-			isFeaturedKeysAvailable: true
-		}
-	});
-};
+		return checked ? this.props.onShowProduct(artikelnummer, index) : this.props.onHideProduct(artikelnummer);
+	};
+
 	/** The default render method */
 	render() {
-		/**
-		 * @method renderBadgeImage
-		 * @summary Render method for badge images 
-		 * A convenience method which renders badge images per product chosen for comparison
-		 * @param {Array} badgeImages - Array of badge images
-		 * @param {Integer} featuredKeyIndex - Index of the product row
-		 * @param {Integer} index - index of the badge image in the badgeImages array
-		 */
-		const renderBadgeImage = ((badgeImages, featuredKeyIndex, index) => (
-			badgeImages.map((imgUrl, imgIndex) => (
-				<BadgeImage
-					key={`${featuredKeyIndex}_${index}_${imgIndex}`}
-					src={imgUrl}
-					alt={featuredKeyIndex.Name} />
-			))
-		));
-		
-		/**
-		 * @method renderFeatureCell
-		 * @param {*} featuredKeyIndex 
-		 */
-		const renderFeatureCell = (featuredKeyIndex) => (
-			this.props.products.map((product, index) => {
-				if(featuredKeyIndex === 'Badges') {
-					return(
-						<FeatureCell
-							style={{padding: '0.5rem'}}
-							className={product.Display ? null : classes.hide}
-							key={`${featuredKeyIndex}_${index}`}>
-								{renderBadgeImage(product[featuredKeyIndex].split('|'), featuredKeyIndex, index)}
-						</FeatureCell>
-					);
-				} else {
-					return(
-						<FeatureCell
-							style={{padding: '0.5rem'}}
-							className={product.Display ? null : classes.hide}
-							key={`${featuredKeyIndex}_${index}`}>
-								{product[featuredKeyIndex]}
-						</FeatureCell>
-					);
-				}
-			})
-		);
-
 		let renderedTableRows = null;
-
-		if(this.props.isFeaturedKeysAvailable) {
-      /** Looping over the sortedFeatureKeys array */
-			renderedTableRows = this.props.sortedFeatureKeys.map((featureKey, index) => {
-				if(featureKey !== 'Name' && featureKey !== 'SalePrice' &&
-					featureKey !== 'ProductImage' && featureKey !== 'Atp' &&
-					featureKey !== 'Channel' && featureKey !== 'Display' &&
-					featureKey !== 'BUP_UOM' && featureKey !== 'BUP_Value' &&
-					featureKey !== 'Uom' && featureKey !== 'GrossPrice' &&
-					featureKey !== 'ManufacturerName' && featureKey !== 'MinQuantity' &&
-					featureKey !== 'Sku' && featureKey !== 'ListPrice' &&
-					featureKey !== 'Channel' && featureKey !== 'ManufacturerImage' && featureKey !== 'BUP_Conversion' ) {
-					return (
-						<FeatureRow key={`${featureKey}__${index}`}>
-							<FeatureCell style={{padding: '0.5rem', borderRight: '1px solid #cfcfcf'}}>
-								{featureKey}
-							</FeatureCell>
-							{renderFeatureCell(featureKey)}
-						</FeatureRow>
-					);
-				}
-			});
+		if(this.props.featureRowDataAvailable) {//Wait until data is set to the state
+			/**
+			 * @summary This constant contains the list of rendered feature rows generates from props.featureRowData
+			 */
+			renderedTableRows = <FeatureRows products = {this.props.featureRowData} />
 		}
 
 		/**
-		 * Default return called under the render method 
+		 * @summary This constant contains the ist of rendered Product preview panels from props.productSubset
+		 */
+		const productPreviewCells = this.props.productsSubset.map((product) => {
+			return(
+				<FeatureCell className={classes.FeaturePreview} key={product.Artikelnummer}>
+					<ProductPreview
+						{...this.props}
+						details={product}
+						clicked={() => this.props.onHideProduct(product.Artikelnummer)}
+					/>
+				</FeatureCell>
+			);
+		});
+
+		/**
+		 * @summary Default return called under the render method 
 		 */
 		return (
-			<Fragment>
-				<Title title={`${productCountIndicator(this.props.products)} ${title}`} />
+			<div className={classes.Layout}>
+				<Title title={`${this.props.productsSubset.length} ${Constants.title}`} />
 				<TableContainer component={Paper} elevation={0} >
 				<Table aria-label="customized table">
 					<TableHead>
 						<FeatureRow>
-							<FeatureCell style={{minHeight: '300px', padding: '0.5rem', borderRight: '1px solid #cfcfcf'}}>
+							<FeatureCell className={classes.FilterPanel}>
 								<FilterPanel
 									{...this.props}
+									onChange={(event) => this.onFilterOptionClicked(event)}
 								/>
 							</FeatureCell>
-							{this.props.products.map((product) => {
-								return(
-									<FeatureCell style={{padding: 0}} className={product.Display ? null : classes.hide} key={product.Artikelnummer}>
-										<ProductPreviewMaterial
-											show={this.props.showProduct}
-											details={product}
-											clicked={() => this.props.onShowHideProduct(product.Artikelnummer)}
-											disabled={(product.Display && productCountIndicator(this.props.products) < 3) ? true : false}
-										/>
-									</FeatureCell>
-								);
-							})}
+							{productPreviewCells}
 						</FeatureRow>
 					</TableHead>
 					<TableBody>
@@ -182,11 +142,10 @@ class Layout extends Component {
 					</TableBody>
 				</Table>
 				</TableContainer>
-			</Fragment>
+			</div>
 		);
 	}
 };
-
 
 /**
  * @method mapStateToProps
@@ -197,22 +156,39 @@ class Layout extends Component {
 const mapStateToProps = (state) => {
 	return {
 		products: state.products,
-		sortedFeatureKeys: state.sortedFeatureKeys,
-		isFeaturedKeysAvailable: state.isFeaturedKeysAvailable,
+		productsSubset: state.productsSubset,
+		featureRowData: state.featureRowData,
+		featureRowDataAvailable: state.featureRowDataAvailable,
 	}
 };
 
 /**
  * @method mapDispatchToProps
  * @summary method used to dispatch actions to the reducer via component actions
- * @param {Function} dispatch 
+ * @param {Function} dispatch :the dispatched action
  */
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onShowHideProduct: (Artikelnummer) => dispatch({type: ActionTypes.SHOW_HIDE_PRODUCT, Artikelnummer: Artikelnummer}),
-		dispatchStateData: (newState) => dispatch({type: ActionTypes.ADD_STATE, newState:newState})
+		onHideProduct: (Artikelnummer) => dispatch({
+			type: ActionTypes.DELETE_PRODUCT,
+			Artikelnummer: Artikelnummer
+		}),
+		onShowProduct: (Artikelnummer, index) => dispatch({
+			type: ActionTypes.ADD_PRODUCT,
+			artikel: {
+				nummer: Artikelnummer,
+				index: index
+			}
+		}),
+		dispatchStateData: (newState) => dispatch({
+			type: ActionTypes.ADD_STATE,
+			newState:newState
+		})
 	}
 };
 
-/** connect method being used to return a function which acts as a HOC to 'Layout' companent */
+/**
+ * @summary the `connect` method being used to return a function which acts as a HOC,
+ *  and passes `mapStateToProps` and `mapDispatchToProps` to this Layout companent
+ */
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);
