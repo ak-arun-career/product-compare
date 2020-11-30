@@ -143,6 +143,9 @@ product-compare/
                                 Badge.js
             ProductPriceTag/
                 ProductProceTag.js
+        UI/
+            Title/
+                Title.js
     containers/
         Layout/
             Layout.js
